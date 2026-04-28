@@ -1,0 +1,28 @@
+name: Release GitHub Actions
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag for the release"
+        required: true
+      node_version:
+        description: "Specify Node.js version (e.g., '18', '20', 'lts/*')"
+        required: false
+        type: string
+        default: "24"
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+
+    uses: step-security/reusable-workflows/.github/workflows/actions_release.yaml@v1
+    with:
+      tag: "${{ github.event.inputs.tag }}"
+      node_version: "${{ github.event.inputs.node_version }}"
