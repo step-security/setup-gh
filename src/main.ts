@@ -1,7 +1,7 @@
 import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
 import * as github from "@actions/github";
-import { GitHub } from "@actions/github/lib/utils.js";
+import { GitHub } from "@actions/github/lib/utils";
 import * as crypto from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import semver from "semver";
@@ -80,7 +80,7 @@ async function run(): Promise<void> {
       owner: "cli",
       repo: "cli",
     });
-    const versions = releases.map((release) => release.tag_name.slice(1));
+    const versions: string[] = releases.map((release: { tag_name: string }) => release.tag_name.slice(1));
     const matched = semver.maxSatisfying(versions, version);
     if (!matched) {
       throw new Error(`No version matching '${version}' found`);
@@ -125,7 +125,7 @@ async function run(): Promise<void> {
         repo: "cli",
         tag: `v${version}`,
       });
-      const asset = release.assets?.find((a) => a.name === file);
+      const asset = release.assets?.find((a: { name: string }) => a.name === file);
       const digest = (asset as unknown as { digest?: string })?.digest;
       if (digest) {
         const expectedHash = digest.replace("sha256:", "");
